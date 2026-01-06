@@ -1,0 +1,42 @@
+DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial; background: #fdf2e9; margin: 0; padding: 10px; }
+        .header { background: #FF007F; color: white; text-align: center; padding: 12px; font-weight: bold; border-radius: 5px; margin-bottom: 15px; }
+        .card { background: #ffffd0; border: 2px solid #b71c1c; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; padding: 10px; }
+        .m-name { color: #000080; font-size: 18px; font-weight: bold; margin: 0; text-transform: uppercase; }
+        .res { color: #a52a2a; font-size: 22px; font-weight: bold; margin: 5px 0; }
+        .btn { background: #3f51b5; color: white; border: none; padding: 8px 12px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">WORLD ME SABSE FAST SATTA MATKA RESULT</div>
+    <div id="display">Loading Results...</div>
+
+    <script>
+        const id = '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew'; 
+        const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json`;
+
+        fetch(url).then(res => res.text()).then(data => {
+            const json = JSON.parse(data.substr(47).slice(0, -2));
+            const rows = json.table.rows;
+            let html = '';
+            for (let i = 1; i < rows.length; i++) {
+                const name = rows[i].c[1] ? rows[i].c[1].v : '---';
+                const result = rows[i].c[2] ? rows[i].c[2].v : '---';
+                html += `
+                <div class="card">
+                    <div style="text-align:center; flex:1;">
+                        <div class="m-name">${name}</div>
+                        <div class="res">${result}</div>
+                    </div>
+                    <a href="panel.html?market=${name}" class="btn">Panel</a>
+                </div>`;
+            }
+            document.getElementById('display').innerHTML = html;
+        });
+    </script>
+</body>
+</html>
