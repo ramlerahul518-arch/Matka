@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial; background: #fff; margin: 0; padding: 5px; }
+        .header { background: #3f51b5; color: white; text-align: center; padding: 10px; font-weight: bold; }
+        .back-btn { background: #FF007F; color: white; padding: 5px 10px; text-decoration: none; display: inline-block; margin-bottom: 5px; border-radius: 3px; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; border: 1px solid #999; }
+        th, td { border: 1px solid #999; padding: 5px 1px; text-align: center; font-size: 10px; height: 55px; }
+        th { background: #ffeb3b; color: #b71c1c; font-weight: bold; }
+        .date-col { background: #f2f2f2; font-weight: bold; width: 65px; font-size: 9px; }
+        .res-box { display: flex; flex-direction: column; line-height: 1.1; }
+        .p-side { font-size: 8px; color: #666; }
+        .jodi { font-size: 14px; color: #b71c1c; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">← Back</a>
+    <div id="m-title" class="header">PANEL RECORD</div>
+    <table>
+        <thead>
+            <tr><th>Date</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>
+        </thead>
+        <tbody id="chart-body"></tbody>
+    </table>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const marketName = params.get('market');
+        document.getElementById('m-title').innerText = marketName ? marketName.toUpperCase() : "CHART";
+
+        const id = '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew'; 
+        // 7 Sheets ke naam yahan hain
+        const sheets = ['Sheet1', 'Sheet2', 'Sheet3', 'Sheet4', 'Sheet5', 'Sheet6', 'Sheet7'];
+
+        async function loadPanelData() {
+            let filtered = [];
+
+            // Sabhi 7 sheets se data load karna
+            for (let sName of sheets) {
+                const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&sheet=${sName}`;
+                try {
+                    const res = await fetch(url);
+                    const text = await res.text();
+                    const json = JSON.parse(text.substring(47, text.length - 2));
+                    const rows = json.table.rows;
+                    
+                    // Is market ka data filter karke jama karein
+                    const sheetData = rows.filter(r => r.c[1] && r.c[1].v.toString().trim().toLowerCase() === marketName.toLowerCase().trim());
+                    filtered = filtered.concat(sheetData);
+                } catch (e) { console.log("Error loading " + sName); }
+            }
+
+            if (filtered.length === 0) {
+                document.getElementById('chart-body').innerHTML = "<tr><td colspan='8'>No Records Found</td></tr>";
+                return;
+            }
+
+            let html = '';
+            // 7-7 entries ko ek hafta bana kar dikhana
+            for (let i = 0; i < filtered.length; i += 7) {
+                let startD = (filtered[i] && filtered[i].c[0]) ? filtered[i].c[0].v : '---';
+                let endD = (filtered[i+6] && filtered[i+6].c[0]) ? filtered[i+6].c[0].v : (filtered[filtered.length-1].c[0] ? filtered[filtered.length-1].c[0].v : '---');
+                
+                html += `<tr><td class="date-col">${startD}<br>to<br>${endD}</td>`;
+                
+                for (let j = 0; j < 7; j++) {
+                    let dayRow = filtered[i + j];
+                    if (dayRow && dayRow.c[2]) {
+                        let res = dayRow.c[2].v.toString();
+                        let p = res.split('-');
+                        html += `<td><div class="res-box">
+                                    <span class="p-side">${p[0]||''}</span>
+                                    <span class="jodi">${p[1]||res}</span>
+                                    <span class="p-side">${p[2]||''}</span>
+                                 </div></td>`;
+                    } else {
+                        html += `<td>---</td>`; 
+                    }
+                }
+                html += `</tr>`;
+            }
+            document.getElementById('chart-body').innerHTML = html;
+        }
+
+        loadPanelData();
+    </script>
+</body>
+</html>
