@@ -1,42 +1,137 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial; background: #fdf2e9; margin: 0; padding: 10px; }
-        .header { background: #FF007F; color: white; text-align: center; padding: 12px; font-weight: bold; border-radius: 5px; margin-bottom: 15px; }
-        .card { background: #ffffd0; border: 2px solid #b71c1c; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; padding: 10px; }
-        .m-name { color: #000080; font-size: 18px; font-weight: bold; margin: 0; text-transform: uppercase; }
-        .res { color: #a52a2a; font-size: 22px; font-weight: bold; margin: 5px 0; }
-        .btn { background: #3f51b5; color: white; border: none; padding: 8px 12px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 12px; }
+        body { font-family: Arial, sans-serif; background: #fdf2e9; margin: 0; padding: 10px; }
+        .header { background: #FF007F; color: white; text-align: center; padding: 12px; font-weight: bold; border-radius: 5px; margin-bottom: 5px; }
+        .notice-box { background: #fff; border: 2px solid #FF007F; padding: 10px; margin-bottom: 15px; border-radius: 5px; text-align: center; color: #b71c1c; font-weight: bold; font-size: 14px; }
+        .card { border: 1px solid #b71c1c; border-radius: 4px; margin-bottom: 8px; display: flex; flex-direction: column; align-items: center; padding: 10px; position: relative; }
+        .m-name { font-size: 19px; font-weight: bold; text-transform: uppercase; margin-bottom: 2px; color: #000080; }
+        .res { color: #a52a2a; font-size: 22px; font-weight: bold; margin: 4px 0; }
+        .m-time { color: #000; font-size: 13px; font-weight: bold; }
+        .btn { background: #3f51b5; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 11px; position: absolute; top: 50%; transform: translateY(-50%); }
+        .left-btn { left: 8px; }
+        .right-btn { right: 8px; }
+        
+        .bottom-notice { border-radius: 10px; padding: 15px; margin-top: 15px; text-align: center; font-weight: bold; border: 2px solid #b71c1c; line-height: 1.6; }
+        .green-box { background: #008000; color: white; }
+        .yellow-box { background: #ffffd0; color: #b71c1c; }
+        .red-box { background: #b71c1c; color: white; }
+        .blue-box { background: #1e88e5; color: white; }
     </style>
 </head>
 <body>
     <div class="header">WORLD ME SABSE FAST SATTA MATKA RESULT</div>
-    <div id="display">Loading Results...</div>
+    <div class="notice-box">🚨 NOTICE: Sabse Fast Result Ke Liye Page Refresh Karein. 🚨</div>
+
+    <div id="display"></div>
+
+    <div id="bottom-section">
+        <div class="bottom-notice green-box">
+            DPBOSS WEEKLY PATTI CHART<br>
+            05-01-2026 To 11-01-2026<br>
+            1=>236-678 | 2=>110-129
+        </div>
+
+        <div class="bottom-notice green-box">
+            DPBOSS WEEKLY LINE OPEN/CLOSE<br>
+            Mon: 4-9-3-8 | Tue: 2-7-5-0
+        </div>
+
+        <div class="bottom-notice red-box">
+            WEEKLY JODI CHART<br>
+            32 37 23 28 | 21 26 71 76
+        </div>
+
+        <div class="bottom-notice yellow-box">
+            ✔ FREE GAME ZONE OPEN-CLOSE ✔<br>
+            DAILY FIX ANK GUESSING
+        </div>
+
+        <div class="bottom-notice blue-box">
+            MILAN DAY SPECIAL FIX GAME<br>
+            💯% SURE JODI & PATTI AVAILABLE
+        </div>
+
+        <div class="bottom-notice red-box">
+            DATE FIX GAME DHAMAKA<br>
+            SINGLE JODI - SINGLE PATTI
+        </div>
+
+        <div class="bottom-notice green-box">
+            CONTACT FOR FIX GAME ADMIN<br>
+            CALL OR WHATSAPP: +91 9XXXXXXXXX
+        </div>
+
+        <div class="bottom-notice yellow-box">
+            Dhyan Dein: Ye Website Sirf Manoranjan Ke Liye Hai.<br>
+            Hum Kisi Bhi Tarah Ke Satta Matka Ko Support Nahi Karte.
+        </div>
+    </div>
 
     <script>
-        const id = '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew'; 
-        const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json`;
+        const configs = [
+            { id: '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew', sheet: 'Sheet1' },
+            { id: '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew', sheet: 'Sheet2' },
+            { id: '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew', sheet: 'Sheet3' },
+            { id: '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew', sheet: 'Sheet4' },
+            { id: '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew', sheet: 'Sheet5' },
+            { id: '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew', sheet: 'Sheet6' },
+            { id: '1qFpzTPfKA8_3Mmj90QHJAl64ZXdUczYxG9uq9tVYKew', sheet: 'Sheet7' }
+        ];
 
-        fetch(url).then(res => res.text()).then(data => {
-            const json = JSON.parse(data.substr(47).slice(0, -2));
-            const rows = json.table.rows;
+        let marketMemory = {};
+
+        async function loadAllData() {
+            for (const conf of configs) {
+                const url = `https://docs.google.com/spreadsheets/d/${conf.id}/gviz/tq?tqx=out:json&sheet=${conf.sheet}`;
+                try {
+                    const response = await fetch(url);
+                    const data = await response.text();
+                    const json = JSON.parse(data.substring(47, data.length - 2));
+                    
+                    json.table.rows.forEach((row, idx) => {
+                        if (idx === 0) return;
+                        const name = row.c[1] ? row.c[1].v.toString().trim() : '';
+                        if (!name) return;
+                        const key = name.toLowerCase();
+                        
+                        if (!marketMemory[key]) {
+                            marketMemory[key] = { name, res: '---', time: '', color: '#ffffd0' };
+                        }
+                        
+                        if (row.c[2]) marketMemory[key].res = row.c[2].v.toString();
+                        if (row.c[3] && row.c[3].v) marketMemory[key].time = row.c[3].v.toString();
+                        
+                        if (row.c[4] && row.c[4].v) {
+                            marketMemory[key].color = row.c[4].v.toString().trim();
+                        } else if (row.c[1].p && row.c[1].p.style && row.c[1].p.style.backgroundColor) {
+                            marketMemory[key].color = row.c[1].p.style.backgroundColor;
+                        }
+                    });
+                } catch (error) {}
+            }
+            displayMarkets();
+        }
+
+        function displayMarkets() {
             let html = '';
-            for (let i = 1; i < rows.length; i++) {
-                const name = rows[i].c[1] ? rows[i].c[1].v : '---';
-                const result = rows[i].c[2] ? rows[i].c[2].v : '---';
+            for (let k in marketMemory) {
+                const m = marketMemory[k];
                 html += `
-                <div class="card">
-                    <div style="text-align:center; flex:1;">
-                        <div class="m-name">${name}</div>
-                        <div class="res">${result}</div>
-                    </div>
-                    <a href="panel.html?market=${name}" class="btn">Panel</a>
-                </div>`;
+                    <div class="card" style="background-color: ${m.color}">
+                        <a href="#" class="btn left-btn">Jodi</a>
+                        <div class="m-name">${m.name}</div>
+                        <div class="res">${m.res}</div>
+                        <div class="m-time">${m.time}</div>
+                        <a href="panel.html?market=${encodeURIComponent(m.name)}" class="btn right-btn">Panel</a>
+                    </div>`;
             }
             document.getElementById('display').innerHTML = html;
-        });
+        }
+
+        loadAllData();
     </script>
 </body>
 </html>
